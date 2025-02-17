@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  ici_global_fe:
+    image: ici_global_fe
+    container_name: ici_global_fe
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /ici_global_fe
+    volumes:
+      - .:/ici_global_fe
+    ports:
+      - '5173:5173'
+    environment:
+      - NODE_ENV=development

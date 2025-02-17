@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
 import UserOne from '../../images/user/user-01.png';
+import { useAppSelector, useAppDispatch} from '../../hooks/dispatch';
+import { loging } from '../../store/autthentication/login';
 
 const DropdownUser = () => {
+  const dispatch = useAppDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
   
   const handleLogout = () => {
+    dispatch(loging({token: "", isLogin: false}))
     localStorage.removeItem('token');
     localStorage.removeItem('isLogin');
     navigate('/login')

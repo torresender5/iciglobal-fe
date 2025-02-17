@@ -34,6 +34,7 @@ interface Select {
 const SelectGroup = ({label, id, options, register, errors}: Select) => {
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+  console.log(options)
 
   const changeTextColor = () => {
     setIsOptionSelected(true);

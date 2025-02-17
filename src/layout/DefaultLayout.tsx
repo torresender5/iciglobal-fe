@@ -1,9 +1,39 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
+import { useAppSelector, useAppDispatch} from '../hooks/dispatch';
+import { loging } from '../store/autthentication/login';
+
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const history = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const login = useAppSelector((state) => state.login);
+
+  const isTokenExpired = () => {
+    const expiration = login.expiration;
+    if (!expiration) return true;
+    let time = Date.now() >= expiration * 1000;
+    return time
+  };
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      if (isTokenExpired()) {
+        dispatch(loging({token: "", isLogin: false, expiration: 0}));
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLogin');
+        navigate('/login');
+      };
+    };
+    checkTokenExpiration();
+    const intervalId = setInterval(checkTokenExpiration, 60000);
+    return () => clearInterval(intervalId);
+  }, [history]);
 
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">

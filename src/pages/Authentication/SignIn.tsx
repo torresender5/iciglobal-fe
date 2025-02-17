@@ -13,6 +13,7 @@ import Logo from '../../images/logo/logo.svg';
 import { useAppDispatch, useAppSelector} from '../../hooks/dispatch';
 import { loging } from '../../store/autthentication/login';
 import axiosInstance from '../../hooks/axiosConfig';
+import { documentTypes } from '../../store/DucumentTypes';
 
 
 type FormData = {
@@ -44,14 +45,19 @@ const SignIn: React.FC = () => {
     return data
   }
   const onSubmit:SubmitHandler<FormData> = async (data) => {
-    console.log('Form submitted');
-    console.log(data)
     const result = await axios.post('/api/login/', data);
-    console.log(data)
     
-    if (result.status) {
-      dispatch(loging({token: result.data.access, isLogin: true}))
-
+    if (result.status && result.data && result.data.access ) {
+      const token = result.data.access;
+      const expiration = JSON.parse(atob(token.split('.')[1])).exp;
+      console.log(expiration)
+      dispatch(loging({token: token,expiration: expiration, isLogin: true}))
+      
+      const document_types = await axios.get('commom/document_type/');
+      console.log(document_types)
+      if (document_types.status){
+        dispatch(documentTypes(document_types.data))
+      }
     } else {
       dispatch(loging(false))
 

@@ -1,15 +1,15 @@
-FROM node:18-alpine
+FROM node:23-alpine
 
-WORKDIR /PORTFOLIO
+WORKDIR /ici_global_fe
 
-COPY package.json .
 
+COPY package*.json ./
+# RUN npm i -g vite
+# RUN npm install --include=dev
 RUN npm install
 
 COPY . .
 
-ENV PORT=8080
-
-EXPOSE 8080
+EXPOSE 5173
 
 CMD [ "npm", "run", "dev"]

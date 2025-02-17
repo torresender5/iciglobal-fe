@@ -5,13 +5,14 @@ import type { RootState } from '../store'
 export interface IsLogin {
   isLogin: boolean | null
   token: string | null
-  
+  expiration: number | null
 }
 
 // Define the initial state using that type
 const initialState: IsLogin = {
     isLogin: localStorage.getItem('isLogin') === 'true'? true : false,
-    token: localStorage.getItem('token')
+    token: localStorage.getItem('token'),
+    expiration: 0
 }
 
 export const Login = createSlice({
@@ -24,6 +25,7 @@ export const Login = createSlice({
       state.isLogin = action.payload.isLogin
       localStorage.setItem('token', action.payload.token)
       state.token = action.payload.token
+      state.expiration = action.payload.expiration
     },
   }
 })

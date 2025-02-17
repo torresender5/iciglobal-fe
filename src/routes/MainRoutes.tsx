@@ -15,7 +15,7 @@ import FormLayout from "../pages/Form/FormLayout";
 import FormElements from "../pages/Form/FormElements";
 import Users from "../pages/users";
 import CreateUsers from "../pages/users/CreateUsers";
-import CreateSupplier from "../pages/supplier/CreateSupplier";
+import CreateSupplierView from "../pages/supplier/createSupplierView";
 import Supplier from "../pages/supplier";
 
 
@@ -44,7 +44,8 @@ const MainRoutes = [
                 path: '/suppliers/create',
                 element: (
                     <DefaultLayout>
-                        <CreateSupplier/>
+                        {/* <CreateSupplier/> */}
+                        <CreateSupplierView />
                     </DefaultLayout>
                 )
 

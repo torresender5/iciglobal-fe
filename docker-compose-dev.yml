@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  ici_global_fe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ici_global_fe
+    restart: always
+    ports:
+      - 5173:5173
+    volumes:
+      - .:/ici_global_fe
+      - .:/ici_global_fe/node_modules
+    environment:
+      - NODE_ENV=development

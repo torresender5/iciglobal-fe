@@ -1,15 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit'
-import Login from './autthentication/login'
-import siginUp from './autthentication/siginUp';
-import Loader from './loader';
+import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // Usar localStorage
+import rootReducer from './index'; // Asegúrate de tener tus slices definidos
 
-export const store = configureStore({
-  reducer: {
-    login: Login,
-    signUp: siginUp,
-    loader: Loader
-  }
-})
+
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+
+const store = configureStore({
+  reducer: persistedReducer,
+});
 
 export default store;
 
@@ -18,3 +23,7 @@ export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
 export type AppStore = typeof store
+
+const persistor = persistStore(store);
+
+export { store, persistor };
