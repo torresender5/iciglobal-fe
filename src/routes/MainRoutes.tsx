@@ -44,7 +44,15 @@ const MainRoutes = [
                 path: '/suppliers/create',
                 element: (
                     <DefaultLayout>
-                        {/* <CreateSupplier/> */}
+                        <CreateSupplierView />
+                    </DefaultLayout>
+                )
+
+            },
+            {
+                path: '/suppliers/update/:type/:id/',
+                element: (
+                    <DefaultLayout>
                         <CreateSupplierView />
                     </DefaultLayout>
                 )

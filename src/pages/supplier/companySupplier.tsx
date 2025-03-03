@@ -85,7 +85,7 @@ const schema = yup.object({
     }),
 }).required()
 
-const CompanySupplier = () => {
+const CompanySupplier = ({companyToEdit, edit}: any) => {
     const axios = axiosInstance()
     const documentsTypes = useAppSelector((state) => state.documentTypes.data);
     const [personInCharge, setPersonInCharge] = useState(false);
@@ -95,6 +95,7 @@ const CompanySupplier = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
         resolver: yupResolver(schema)
     })
@@ -103,8 +104,6 @@ const CompanySupplier = () => {
     }
     
     const onSubmit:SubmitHandler<FormData> = async(data) => {
-        console.log('Form submitted');
-        console.log(data)
         let personInCharge = {};
         if (data.personInCharge){
             personInCharge = {
@@ -148,6 +147,42 @@ const CompanySupplier = () => {
         });
         set_document_types(options);
     },[documentsTypes])
+
+    React.useEffect(() => {
+            console.log('#######  company data', companyToEdit)
+            if(companyToEdit) {
+                let person_in_charge = {};
+                let dataToForm = {};
+                
+                if (companyToEdit.person_in_charge){
+                    person_in_charge = {
+                        firstNameCharge: companyToEdit.person_in_charge.first_name,
+                        secondNameCharge: companyToEdit.person_in_charge.second_name,
+                        lastNameCharge: companyToEdit.person_in_charge.last_name,
+                        secondLastNameCharge: companyToEdit.person_in_charge.second_last_name,
+                        emailCharge: companyToEdit.person_in_charge.email,
+                        phoneNumberCharge: companyToEdit.person_in_charge.phone_number,
+                        documentNumberCharge: companyToEdit.person_in_charge.document_number,
+                        documentTypeCharge: companyToEdit.person_in_charge.document_type,
+                        addressCharge: companyToEdit.person_in_charge.address,
+                        personInCharge: true
+                    }
+                    setPersonInCharge(true)
+                }
+                dataToForm = {
+                    companyName: companyToEdit.company_name,
+                    email: companyToEdit.email,
+                    phoneNumber: companyToEdit.phone_number,
+                    documentNumber: companyToEdit.document_number,
+                    documentType: companyToEdit.document_type,
+                    address: companyToEdit.address,
+                    ...person_in_charge
+                }
+                
+                reset(dataToForm)
+                
+            }
+        },[companyToEdit, reset])
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
@@ -220,7 +255,7 @@ const CompanySupplier = () => {
                     <div className="mb-4.5 gap-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         <label className="mb-2.5 block text-black dark:text-white">
                             Persona Encargada
-                            <SwitcherThree id={'personInCharge'} val={personInCharge} setVal={setPersonInCharge}/>
+                            <SwitcherThree register={register} errors={errors} id='personInCharge' val={personInCharge} setVal={setPersonInCharge}/>
                         </label>
                     </div>
                     { personInCharge &&

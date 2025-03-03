@@ -5,6 +5,7 @@ import * as yup from "yup"
 import axiosInstance from '../../hooks/axiosConfig';
 import { useAppSelector } from '../../hooks/dispatch';
 import React, { useState } from 'react';
+import { exec } from 'apexcharts';
 
 type FormData = {
     firstName: string
@@ -40,7 +41,7 @@ const schema = yup.object({
     address: yup.string().required('This field is required'),
 }).required()
 
-const PersonSupplier = () => {
+const PersonSupplier = ({personToEdit, edit}: any) => {
     const axios = axiosInstance()
     const documentsTypes = useAppSelector((state) => state.documentTypes.data);
     const [document_types, set_document_types] = useState<options>([])
@@ -49,6 +50,7 @@ const PersonSupplier = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
         resolver: yupResolver(schema)
     })
@@ -86,6 +88,31 @@ const PersonSupplier = () => {
         });
         set_document_types(options);
     },[documentsTypes])
+    React.useEffect(() => {
+        console.log('#######  person data', personToEdit)
+        if(personToEdit) {
+
+            let dataToForm = {
+                firstName: personToEdit.first_name,
+                secondName: personToEdit.second_name,
+                lastName: personToEdit.last_name,
+                secondLastName: personToEdit.second_last_name ,
+                email: personToEdit.email,
+                phoneNumber: personToEdit.phone_number,
+                documentNumber: personToEdit.document_number,
+                documentType: personToEdit.document_type ,
+                address: personToEdit.address,
+
+
+            }
+            try {
+                reset(dataToForm)
+            } catch (error) {
+                console.log('#### EERRROORR ####', error)
+            }
+            
+        }
+    },[personToEdit, reset])
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
@@ -196,8 +223,14 @@ const PersonSupplier = () => {
                     </div>
                     <div className="mb-4.5 gap-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
                         <button type='submit' className="flex w-full md:col-start-2 lg:col-start-3 xl:col-start-4 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                        Crear Proveedor
+                        Guardar
                         </button>
+                        {edit &&
+                            <button  className="flex w-full md:col-start-2 lg:col-start-3 xl:col-start-4 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                            cancelar
+                            </button>
+                        }
+
                     </div>
                 </div>
             </form>

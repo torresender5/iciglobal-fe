@@ -51,7 +51,7 @@ const SignIn: React.FC = () => {
       const token = result.data.access;
       const expiration = JSON.parse(atob(token.split('.')[1])).exp;
       console.log(expiration)
-      dispatch(loging({token: token,expiration: expiration, isLogin: true}))
+      dispatch(loging({token: token, expiration: expiration, isLogin: true}))
       
       const document_types = await axios.get('commom/document_type/');
       console.log(document_types)
@@ -62,8 +62,6 @@ const SignIn: React.FC = () => {
       dispatch(loging(false))
 
     }
-    
-    
   }
 
   

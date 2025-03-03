@@ -1,16 +1,36 @@
 import { Dispatch, SetStateAction } from 'react';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
+
+type FormData = {
+  companyName?: string
+  email?: string
+  phoneNumber?: string
+  documentNumber?: string
+  documentType: string 
+  address: string
+  firstNameCharge?: string
+  secondNameCharge?:string
+  lastNameCharge?: string
+  secondLastNameCharge?:string 
+  emailCharge?: string
+  phoneNumberCharge?: string
+  documentNumberCharge?: string
+  documentTypeCharge?: string 
+  addressCharge?: string
+  personInCharge: boolean,
+}
 interface PROPS {
   id: string
   val: boolean
+  register: UseFormRegister<any>
+  errors: FieldErrors<FormData>
+
   // setVal: () => {}
   setVal: Dispatch<SetStateAction<boolean>>
 }
 
-const SwitcherThree = ({id, val, setVal}: PROPS) => {
-  const handleSetVal = () => {
-    setVal(!val)
-  }
+const SwitcherThree = ({register, errors, id, val, setVal}: PROPS) => {
 
   return (
     <div>
@@ -20,10 +40,11 @@ const SwitcherThree = ({id, val, setVal}: PROPS) => {
       >
         <div className="relative">
           <input
+          {...register(id)}
             type="checkbox"
             id={id}
             className="sr-only"
-            onChange={handleSetVal}
+            onChange={() => setVal(!val)}
           />
           <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
           <div
@@ -65,6 +86,7 @@ const SwitcherThree = ({id, val, setVal}: PROPS) => {
             </span>
           </div>
         </div>
+        <p className='text-red-500 text-sm'>{errors?.personInCharge?.message}</p>
       </label>
     </div>
   );
